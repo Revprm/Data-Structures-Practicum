@@ -1,42 +1,84 @@
 #include <iostream>
+#include <string>
 #include <vector>
-#include <unordered_set>
+#include <algorithm>
+#include <sstream>
 #include <queue>
-using namespace std;
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <unordered_set>
+#include <unordered_map>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
-bool rekomen(const vector<unordered_set<int>>& graph, int check) {
-    for (const auto& g : graph) {
-        if (g.count(check) > 0) return 1;
+using namespace std;
+#define Fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define FOR(i, n) for(i = 0; i < n; i++)
+#define ll long long
+#define ull unsigned long long
+#define ui unsigned int
+#define S second
+#define F first
+#define mp make_pair
+#define pb push_back
+#define PI 3.1415926535897932384626433832795
+#define MOD 1e9+7
+typedef pair<int, int> PII;
+typedef queue <int> QI;
+typedef stack <int> SI;
+typedef vector<int> VI;
+typedef vector<string> VS;
+typedef vector<PII> VII;
+typedef vector<VI> VVI;
+typedef vector<unordered_set<int>> VUSI;
+typedef map<int,int> MPII;
+typedef set<int> SETI;
+typedef multiset<int> MSETI;
+
+bool rekomen(const VUSI &g, ll chk) {
+    for (const auto& g : g) {
+        if (g.count(chk) > 0) return 1;
     }
     return 0;
 }
 
-bool tidakrekomen(const vector<unordered_set<int>>& graph, int check) {
-    for (const auto& g : graph) {
-        if (g.size() > 0 && g.count(check) == 0) return 1;
+bool tidakrekomen(const VUSI &g, ll chk) {
+    for (const auto& g : g) {
+        if (g.size() > 0 && g.count(chk) == 0) return 1;
     }
     return 0;
 }
 
 int main() {
-    int n, p1, p2; cin >> n;
-
-    vector<unordered_set<int>> graph(n + 1);
+    ll n, p1, p2, i; cin >> n;
+    VUSI g(n + 1);
     cin >> p1 >> p2;
     while (p1 != -1 && p2 != -1) {
-        graph[p1].insert(p2);
+        g[p1].insert(p2);
         cin >> p1 >> p2;
     }
 
-    bool chk = false;
-    for (int i = 1; i <= n; i++) {
-        if (rekomen(graph, i) && !tidakrekomen(graph, i)) {
+    bool chk = 0;
+    for (i = 1; i <= n; i++) {
+        if (rekomen(g, i) && !tidakrekomen(g, i)) {
             cout << "pilih ini aja chris " << i << endl;
-            chk = true;
+            chk = 1;
             break;
         }
     }
-
     if (!chk) cout << "ga ada yang direkomen" << endl;
     return 0;
 }
