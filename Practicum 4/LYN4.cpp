@@ -1,25 +1,59 @@
 #include <iostream>
-#include <algorithm>
+#include <string>
 #include <vector>
+#include <algorithm>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
 #include <list>
+#include <stack>
 #include <map>
-#include <cstring>
-#include <cmath>
-#define fast ios_base::sync_with_stdio(0); cin.tie(NULL);
-using namespace std;
-int Res[10][10];
-vector<int> visited(10, -1), graph; 
-vector<vector<int>> AdjList;
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
-void checker(){ 
-    for (int i = 0; i < 10; i++){
-        Res[0][i] = 1;
-        Res[i][0] = 1;
-        Res[i][i] = 1;
+using namespace std;
+#define FOR(i, n) for(i = 0; i < n; i++)
+#define FORR(i, n) for(i = 0; i <= n; i++)
+#define Fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ll long long
+#define ull unsigned long long
+#define mp make_pair
+#define pb push_back
+#define PI 3.1415926535897932384626433832795
+#define MOD 1e9+7
+#define modll 1000000007ll
+typedef pair<int, int> PII;
+typedef vector<int> VI;
+typedef vector<string> VS;
+typedef vector<PII> VII;
+typedef vector<VI> VVI;
+typedef map<int,int> MPII;
+typedef set<int> SETI;
+typedef multiset<int> MSETI;
+ll res[10][10];
+VI v, g; 
+VVI adjl;
+
+void suichan(){
+    for (ll i = 0; i < 10; i++){
+        res[0][i] = 1;
+        res[i][0] = 1;
+        res[i][i] = 1;
     }
 }
 
-int Convert(char a, char b){
+ll aqua(char a, char b){
     if (a == 'X' && b == '1') return 1;
     else if (a == 'Y' && b == '1') return 2;
     else if (a == 'Z' && b == '1') return 3;
@@ -30,51 +64,54 @@ int Convert(char a, char b){
     else if (a == 'Y' && b == '3') return 8;
     else return 9;
 }
-void dfs(int u){
-    visited[u] = 1;
-    graph.push_back(u);
-    for (int i = 0; i < graph.size(); i++){
-        Res[graph[i]][u] = 1;
-        Res[u][graph[i]] = 1;
+
+void dfs(ll u){
+    v[u] = 1;
+    g.push_back(u);
+    for (int i = 0; i < g.size(); i++){
+        res[g[i]][u] = 1;
+        res[u][g[i]] = 1;
     }
-    cout << endl;
-    for (int i = 0; i < AdjList[u].size(); i++){
-        int v = AdjList[u][i];
-        if (visited[v] == -1) dfs(v);
+    for (ll i = 0; i < adjl[u].size(); i++){
+        ll a = adjl[u][i];
+        if (v[a] == -1)
+            dfs(a);
     }
 }
 
 int main(){
-    fast
-    AdjList.assign(10, vector<int>()); 
-    memset(Res, 0, sizeof(Res));
-    checker();
+    Fast
+    ll i, j;
+    v.assign(10, -1);
+    adjl.assign(10, vector<int>()); 
+    memset(res, 0, sizeof(res));
+    suichan();
     int n; cin >> n;
     cin.ignore();
     string str;
-    for (int i = 0; i < n; i++){
+    for (i = 0; i < n; i++){
         getline(cin, str);
-        int a = Convert(str[0], str[1]);
-        int b = Convert(str[7], str[8]);
-        AdjList[a].push_back(b);
-        AdjList[b].push_back(a);
+        ll a = aqua(str[0], str[1]);
+        ll b = aqua(str[7], str[8]);
+        adjl[a].push_back(b);
+        adjl[b].push_back(a);
     }
-    int res = 0;
-    for (int i = 1; i <= 9; i++){
-        if (visited[i] == -1){
+    ll ans = 0;
+    for (i = 1; i <= 9; i++){
+        if (v[i] == -1){
             dfs(i);
-            graph.clear();
+            g.clear();
         }
-    }   
-    for (int i = 1; i <= 9; i++){
-        for (int j = 1; j <= 9; j++){
-            if (!Res[i][j] && !Res[j][i]){
-                res++;
-                Res[i][j] = 1;
-                Res[j][i] = 1;
+    }
+    for (i = 1; i <= 9; i++){
+        for (j = 1; j <= 9; j++){
+            if (!res[i][j] && !res[j][i]){
+                ans++;
+                res[i][j] = 1;
+                res[j][i] = 1;
             }
         }
     }
-    cout << "Stars: " << res << " not connected" << endl;
+    cout << "Stars: " << ans << " not connected" << endl;
     return 0;
 }
